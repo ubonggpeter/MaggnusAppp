@@ -361,7 +361,7 @@
       const item = PRODUCTS.find(x=>x.id===selectedId);
       const cart = { items: [{ id:item.id, name:item.name, price:item.price, qty:quantity }], total: item.price * quantity, currency:'NGN' };
       localStorage.setItem('magnus_cart', JSON.stringify(cart));
-      window.location.href = 'checkout (6).html';
+      window.location.href = 'checkout.html';
     };
 
     // initial render
