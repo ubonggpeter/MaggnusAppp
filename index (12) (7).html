@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Magnus - Select Product</title>
+  <style>
+    :root{
+      --bg:#0e0e0f;
+      --panel:#121214;
+      --panel2:#1a1a1d;
+      --text:#ffffff;
+      --muted:#a5a5ac;
+      --accent:#ff8c00;
+      --accent-2:#ff9a1a;
+      --stroke: #2b2b2f;
+      --shadow: 0 10px 30px rgba(0,0,0,.45);
+      --radius-xl: 22px;
+      --radius-lg: 18px;
+      --radius-md: 14px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background: radial-gradient(1200px 600px at 50% -200px,#2b2b2f33 0%,transparent 50%) , var(--bg);
+      color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Apple Color Emoji","Segoe UI Emoji";
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      min-height:100dvh;
+      padding: clamp(8px, 2vw, 24px);
+    }
+    .phone{
+      width:min(520px, 100vw); max-width:100%;
+      height: min(860px, 100dvh);
+      background: #0b0b0c;
+      border-radius: clamp(20px, 4vw, 36px);
+      border:1px solid #222227;
+      box-shadow: 0 20px 80px rgba(0,0,0,.6), inset 0 0 0 1px rgba(255,255,255,.02);
+      overflow:hidden;
+      position:relative;
+    }
+    .notchbar{height:18px;background:linear-gradient(180deg,#0b0b0c, #0c0c0d);}
+    .screen{
+      height:calc(100% - 18px);
+      padding: clamp(14px, 3vw, 26px) clamp(12px, 3vw, 18px) clamp(12px, 3vw, 18px);
+      overflow:auto;
+      background: radial-gradient(120% 120% at 50% -20%, #1b1b1e 0%, #0f0f11 60%);
+    }
+    h1{
+      margin:0 0 18px;
+      font-weight:800;
+      letter-spacing:.2px;
+      font-size: clamp(20px, 3vw, 28px);
+    }
+    .card{
+      background: linear-gradient(165deg, #1a1a1d 0%, #111114 60%);
+      border:1px solid #26262b;
+      border-radius: var(--radius-xl);
+      padding:16px;
+      box-shadow: var(--shadow);
+      position:relative;
+    }
+    .card + .card{ margin-top:14px; }
+    .radio{
+      position:absolute; left:16px; top:18px;
+      width:20px; height:20px; border-radius:50%;
+      border:2px solid #4a4a52; display:grid; place-items:center;
+      background:#0d0d0f;
+    }
+    .radio span{display:block;width:10px;height:10px;border-radius:50%;background:transparent;transition:.2s;}
+    .card.active .radio{ border-color: var(--accent); }
+    .card.active .radio span{ background: var(--accent); }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding: clamp(6px,1.5vw,8px) clamp(10px,2vw,14px); border-radius:999px;
+      background: linear-gradient(180deg, var(--accent-2), var(--accent));
+      color:#1a1100; font-weight:800; font-size: clamp(12px, 2.2vw, 14px);
+      box-shadow: 0 4px 18px rgba(255,140,0,.35), inset 0 -1px 0 rgba(0,0,0,.25);
+    }
+    .price{
+      margin-left:auto; font-weight:900; font-size: clamp(16px, 3.4vw, 20px); letter-spacing:.5px;
+      color:#ffad42;
+    }
+    .row{ display:flex; align-items:center; gap:12px; }
+    .benefits{
+      margin-top:10px;
+      font-size:12px; color:var(--muted);
+      display:flex; align-items:center; gap:8px;
+      opacity:.9;
+    }
+    .divider{ height:1px; background:#26262b; margin:18px 0; border-radius:1px; }
+    .total{
+      display:flex; align-items:center; justify-content:space-between; margin-bottom:14px;
+    }
+    .total .label{ color:#b7b7be; font-weight:700; }
+    .total .value{ font-size:22px; font-weight:900; color:#ffad42; letter-spacing:.3px; }
+    .checkout{
+      display:inline-flex; align-items:center; justify-content:center; gap:10px;
+      background: linear-gradient(180deg, var(--accent-2), var(--accent));
+      border:none; color:#1a1100; font-weight:800; padding:12px 18px;
+      border-radius:999px; cursor:pointer; box-shadow: 0 8px 24px rgba(255,140,0,.35);
+    }
+    .qty{
+      display:flex; align-items:center; gap:10px;
+      margin-top:8px;
+    }
+    .qty button{
+      width: clamp(38px, 9vw, 44px); height: clamp(38px, 9vw, 44px); border-radius:999px; border:1px solid var(--stroke);
+      background:#121214; color:#e7e7ee; font-size: clamp(16px, 3.4vw, 20px); cursor:pointer;
+    }
+    .qty .count{
+      width: clamp(56px, 14vw, 64px); height: clamp(38px, 9vw, 44px); display:grid; place-items:center; border-radius:999px;
+      border:1px dashed var(--stroke); color:#c9c9d0; font-weight:700;
+    }
+    .dock{
+      position:sticky; bottom:0; left:0; right:0;
+      display:flex; justify-content:space-between; gap:14px;
+      background: linear-gradient(180deg, rgba(8,8,9,0), rgba(8,8,9,.85) 30%, rgba(8,8,9,1) 80%);
+      padding-top:14px;
+    }
+    .dock .tray{
+      flex:1; display:flex; align-items:center; justify-content:space-around;
+      background: linear-gradient(180deg, #1a1a1d, #121214);
+      border:1px solid #26262b; border-radius: 26px; padding:14px 16px;
+      box-shadow: var(--shadow);
+    }
+    .dot{width:6px;height:6px;border-radius:50%;background:#ffad42; display:inline-block;}
+    .header{
+      display:flex; align-items:center; justify-content:space-between; margin-bottom:12px;
+    }
+    .close{
+      width:34px; height:34px; border-radius:10px; background:#1a1a1d; border:1px solid #2a2a30;
+      display:grid; place-items:center; font-weight:900; color:#d5d5de;
+    }
+    a, button{ -webkit-tap-highlight-color: transparent; }
+  
+    @media (max-height: 700px) {
+      .phone{ height: 100dvh; }
+    }
+    @media (min-width: 768px){
+      .phone{ width: min(560px, 100%); }
+    }
+  
+    /* Benefits Modal */
+    .modal-backdrop{
+      position: fixed; inset: 0; background: rgba(0,0,0,.6);
+      display:none; align-items: center; justify-content: center;
+      z-index: 9999; padding: clamp(12px, 4vw, 24px);
+    }
+    .modal-backdrop.show{ display:flex; }
+    .modal{
+      width: min(520px, 100%);
+      background: linear-gradient(165deg, #1a1a1d 0%, #111114 60%);
+      border:1px solid #26262b; border-radius: 18px;
+      box-shadow: 0 30px 80px rgba(0,0,0,.5);
+      color:#fff; overflow:hidden;
+    }
+    .modal-head{
+      display:flex; align-items:center; justify-content:space-between;
+      padding: 14px 16px; border-bottom:1px solid #26262b;
+    }
+    .modal-title{ font-weight:800; font-size: clamp(16px, 3vw, 20px); }
+    .modal-close{
+      border:1px solid #2b2b2f; background:#19191c; color:#fff; border-radius:10px;
+      padding:8px 10px; cursor:pointer;
+    }
+    .modal-body{ padding: 14px 16px; }
+    .perk{
+      display:flex; align-items:flex-start; gap:10px; padding:10px 0;
+      border-bottom:1px dashed #2b2b2f; font-size:14px; color:#d7d7de;
+    }
+    .perk:last-child{ border-bottom:none; }
+    .perk i{ font-style:normal; }
+
+  
+    /* Benefits modal */
+    .modalOverlay{
+      position: fixed; inset: 0; background: rgba(0,0,0,.6);
+      display: none; align-items: center; justify-content: center; padding: 18px; z-index: 50;
+      backdrop-filter: blur(2px);
+    }
+    .modal{
+      width: min(560px, 96vw);
+      background: linear-gradient(165deg, #1a1a1d 0%, #111114 60%);
+      border:1px solid #26262b; border-radius: 20px; box-shadow: 0 30px 80px rgba(0,0,0,.55);
+      color:#fff;
+    }
+    .modal header{
+      display:flex; align-items:center; justify-content:space-between;
+      padding: 14px 16px; border-bottom:1px solid #222228;
+    }
+    .modal header h2{ margin:0; font-size: clamp(16px, 3vw, 20px); }
+    .modal .closeBtn{ background:#1a1a1d; border:1px solid #2a2a30; color:#d5d5de; border-radius:10px; padding:8px 12px; cursor:pointer; }
+    .modal .body{ padding: 14px 16px; font-size: 14px; color:#e9e9f0; line-height:1.55; }
+    .modal ul{ margin: 10px 0 0 18px; }
+    .modal .fine{ color:#bfbfc8; font-size:12px; margin-top:10px; }
+  </style>
+</head>
+<body>
+  <div class="phone" role="application">
+    <div class="notchbar"></div>
+    <div class="screen">
+      <div class="header">
+        <h1>Select Product</h1>
+        <div class="close">×</div>
+      </div>
+
+      <div id="cards"></div>
+
+      <div class="divider"></div>
+
+      <div class="total">
+        <div>
+          <div class="label">Total:</div>
+          <div id="total" class="value">₦0.00</div>
+        </div>
+        <button id="checkoutBtn" class="checkout">Checkout</button>
+      </div>
+
+      <div class="qty" aria-label="quantity">
+        <button id="minus">−</button>
+        <div class="count" id="qtyCount">1</div>
+        <button id="plus">+</button>
+      </div>
+
+      <div class="dock" aria-label="dock">
+        <div class="tray">
+          <span>🏠</span>
+          <span>🔎</span>
+          <span>🛒</span>
+          <span>🔔</span>
+        </div>
+      </div>
+    
+      <!-- Benefits Modal -->
+      <div id="benefitsOverlay" class="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="benefitsTitle">
+        <div class="modal">
+          <header>
+            <h2 id="benefitsTitle">Package Benefits</h2>
+            <button class="closeBtn" id="benefitsClose">Close</button>
+          </header>
+          <div class="body" id="benefitsBody"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const PRODUCTS = [
+      { id: 'lite', name: 'Magnus Lite', price: 11000, perks: ['Networking-focused plan', 'Entry activities', 'Basic support']},
+      { id: 'pro', name: 'Magnus Pro', price: 17500, perks: ['High-income plan', 'More activities', 'Priority support']},
+      { id: 'business', name: 'Magnus Business', price: 28500, perks: ['Generate millions (no referrals)', 'All activities unlocked', 'Premium support']},
+    ];
+    // Benefits content per package (HTML strings)
+    const BENEFITS = {
+      lite: `
+        <p><strong>Magnus Lite</strong> — networking‑focused with limited earnings. Ideal for starters building habits and learning the system.</p>
+        <ul>
+          <li>Access to <em>Product PR</em> data entry job (earn up to ₦985 every ~2 minutes, Lite tier).</li>
+          <li>Sales Achievements eligibility (milestones from ₦5,800 for 3 sales upward).</li>
+          <li>Training, community, and habit‑building tools.</li>
+        </ul>
+        <p class="fine">Built for learning + gradual income growth through networking.</p>
+      `,
+      pro: `
+        <p><strong>Magnus Pro</strong> — a high‑income plan capable of generating millions <em>without referrals</em>.</p>
+        <ul>
+          <li>Higher pay rate on <em>Product PR</em> than Lite.</li>
+          <li>Access to Sales Achievements with larger milestone rewards.</li>
+          <li>Leverages automation & advanced tools for scale.</li>
+        </ul>
+        <p class="fine">Great for users who want bigger earnings with reduced dependency on networking.</p>
+      `,
+      business: `
+        <p><strong>Magnus Business</strong> — the top plan designed for maximum earnings with no referral requirement.</p>
+        <ul>
+          <li><strong>Highest</strong> pay rate on <em>Product PR</em> (best among all plans).</li>
+          <li>Sales Achievements up to <strong>₦10,000,000</strong> + Rwanda trip on completing all goals.</li>
+          <li>Full access to platform automations and pro‑level tools.</li>
+          <li>Eligible to apply for PayFac (sub‑admin) pathway that pays commissions up to ₦2,280 per approval (plus indirect bonuses).</li>
+        </ul>
+        <p class="fine">Best choice for users ready to scale income aggressively with the highest payouts.</p>
+      `
+    };
+
+    const overlay = document.getElementById('benefitsOverlay');
+    const benefitsBody = document.getElementById('benefitsBody');
+    const benefitsClose = document.getElementById('benefitsClose');
+
+    function openBenefits(id){
+      const html = BENEFITS[id] || '<p>No benefits data found.</p>';
+      benefitsBody.innerHTML = html;
+      overlay.style.display = 'flex';
+    }
+    function closeBenefits(){
+      overlay.style.display = 'none';
+    }
+    benefitsClose?.addEventListener('click', closeBenefits);
+    overlay?.addEventListener('click', (e)=>{ if(e.target === overlay) closeBenefits(); });
+
+    
+    const cardsEl = document.getElementById('cards');
+    const qtyCount = document.getElementById('qtyCount');
+    let quantity = 1;
+    let selectedId = 'business'; // default like screenshot's last selected
+
+    function currency(n){ return '₦' + n.toLocaleString('en-NG', {minimumFractionDigits:0}); }
+
+    function renderCards(){
+      cardsEl.innerHTML = PRODUCTS.map(p => `
+        <div class="card ${selectedId===p.id ? 'active':''}" data-id="${p.id}" role="button" tabindex="0" aria-pressed="${selectedId===p.id}">
+          <div class="radio" aria-hidden="true"><span></span></div>
+          <div class="row" style="padding-left:36px;">
+            <div class="pill">${p.name}</div>
+            <div class="price">${currency(p.price)}</div>
+          </div>
+          <div class="benefits" data-benefits="${p.id}" style="padding-left:36px;">
+            <span>See benefits</span><span class="dot"></span>
+          </div>
+        </div>
+      `).join('');
+      attachCardHandlers();
+      attachBenefitsHandlers();
+      updateTotal();
+    }
+
+    function attachCardHandlers(){
+      document.querySelectorAll('.card').forEach(card=>{
+        card.addEventListener('click', ()=>{
+          selectedId = card.dataset.id;
+          renderCards();
+        });
+        card.addEventListener('keydown', (e)=>{
+          if(e.key==='Enter' || e.key===' '){ e.preventDefault(); selectedId = card.dataset.id; renderCards(); }
+        });
+      });
+    }
+
+    function attachBenefitsHandlers(){
+      document.querySelectorAll('.benefits').forEach(el=>{
+        el.addEventListener('click', (e)=>{
+          e.stopPropagation();
+          const id = e.currentTarget.getAttribute('data-benefits');
+          openBenefits(id);
+        });
+      });
+    }
+    function updateTotal(){
+      const p = PRODUCTS.find(x=>x.id===selectedId);
+      const t = p.price * quantity;
+      document.getElementById('total').textContent = currency(t) + '.00'.replace('.00','');
+    }
+
+    document.getElementById('plus').onclick = ()=>{ quantity++; qtyCount.textContent = quantity; updateTotal(); };
+    document.getElementById('minus').onclick = ()=>{ quantity = Math.max(1, quantity-1); qtyCount.textContent = quantity; updateTotal(); };
+
+    document.getElementById('checkoutBtn').onclick = ()=>{
+      const item = PRODUCTS.find(x=>x.id===selectedId);
+      const cart = { items: [{ id:item.id, name:item.name, price:item.price, qty:quantity }], total: item.price * quantity, currency:'NGN' };
+      localStorage.setItem('magnus_cart', JSON.stringify(cart));
+      window.location.href = 'checkout (6).html';
+    };
+
+    // initial render
+    renderCards();
+  </script>
+
+  <!-- Benefits Modal -->
+  <div id="benefitsModal" class="modal-backdrop" role="dialog" aria-modal="true" aria-hidden="true">
+    <div class="modal">
+      <div class="modal-head">
+        <div class="modal-title" id="benefitsTitle">Package Benefits</div>
+        <button class="modal-close" id="benefitsClose" aria-label="Close">Close</button>
+      </div>
+      <div class="modal-body" id="benefitsList"></div>
+    </div>
+  </div>
+
+
+  <script>
+    (function(){
+      // Wait until main cards render function (if any) runs.
+      function ready(fn){
+        if(document.readyState !== 'loading') fn(); else document.addEventListener('DOMContentLoaded', fn);
+      }
+      ready(function(){
+        const modal = document.getElementById('benefitsModal');
+        const title = document.getElementById('benefitsTitle');
+        const list = document.getElementById('benefitsList');
+        const closeBtn = document.getElementById('benefitsClose');
+
+        function openModal(pkg){
+          title.textContent = pkg.name + ' — Benefits';
+          list.innerHTML = (pkg.perks && pkg.perks.length ? pkg.perks : ['No benefits listed']).map(p => `
+            <div class="perk"><i>✔️</i><span>${p}</span></div>
+          `).join('');
+          modal.classList.add('show');
+          modal.setAttribute('aria-hidden','false');
+        }
+        function closeModal(){
+          modal.classList.remove('show');
+          modal.setAttribute('aria-hidden','true');
+        }
+        closeBtn.addEventListener('click', closeModal);
+        modal.addEventListener('click', (e)=>{ if(e.target === modal) closeModal(); });
+
+        // Event delegation: clicking "See benefits" inside any card
+        document.addEventListener('click', function(e){
+          const btn = e.target.closest('.benefits');
+          if(!btn) return;
+          const card = btn.closest('.card');
+          if(!card) return;
+          const id = card.getAttribute('data-id');
+          try{
+            // Use global PRODUCTS array created by the page
+            const pkg = (window.PRODUCTS || []).find(x => x.id === id);
+            if(pkg){ openModal(pkg); }
+            else{ // fallback: try to infer from text content
+              const name = (card.querySelector('.pill')?.textContent || '').trim();
+              const byName = (window.PRODUCTS || []).find(x => x.name === name);
+              if(byName) openModal(byName);
+            }
+          }catch(err){ console.warn('Benefits modal error:', err); }
+        }, true);
+      });
+    })();
+  </script>
+
+</body>
+</html>
