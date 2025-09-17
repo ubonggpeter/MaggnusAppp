@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Magnus — Home</title>
+  <meta name="description" content="Magnus is a value-driven digital retail ecosystem with smartphone tasks, streaming jobs, referral rewards, and fast NGN withdrawals."/>
+
+  <style>
+    :root{
+      --bg:#0e0e0f;
+      --panel:#121214;
+      --panel2:#1a1a1d;
+      --text:#ffffff;
+      --muted:#a5a5ac;
+      --accent:#ff8c00;
+      --accent-2:#ff9a1a;
+      --stroke:#2b2b2f;
+      --shadow: 0 10px 30px rgba(0,0,0,.45);
+      --radius-xl: 22px;
+      --radius-lg: 18px;
+      --radius-md: 14px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      background: radial-gradient(1200px 600px at 50% -200px,#2b2b2f33 0%,transparent 50%), var(--bg);
+      color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial;
+      min-height:100dvh;
+      line-height:1.45;
+    }
+
+    .container{ width:min(1100px, 92vw); margin-inline:auto; }
+    .section{ padding: clamp(40px, 7vw, 90px) 0; }
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center; gap:10px;
+      background: linear-gradient(180deg, var(--accent-2), var(--accent));
+      border:none; color:#1a1100; font-weight:800; padding: clamp(10px, 2.4vw, 14px) clamp(14px, 3vw, 20px);
+      border-radius:999px; cursor:pointer; box-shadow: 0 8px 24px rgba(255,140,0,.35);
+      text-decoration:none;
+    }
+    .btn.ghost{
+      background:transparent; color:#fff; border:1px solid var(--stroke);
+      box-shadow:none;
+    }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding: clamp(6px,1.5vw,8px) clamp(10px,2vw,14px); border-radius:999px;
+      background: linear-gradient(180deg, var(--accent-2), var(--accent));
+      color:#1a1100; font-weight:800; font-size: clamp(12px, 2.2vw, 14px);
+      box-shadow: 0 4px 18px rgba(255,140,0,.35), inset 0 -1px 0 rgba(0,0,0,.25);
+    }
+    .card{ background: linear-gradient(165deg, #1a1a1d 0%, #111114 60%); border:1px solid #26262b; border-radius: var(--radius-xl); box-shadow: var(--shadow); }
+
+    nav{ position:sticky; top:0; z-index:20; backdrop-filter: saturate(140%) blur(6px); background: rgba(16,16,18,.6); border-bottom:1px solid #1e1e22; }
+    .nav-inner{ display:flex; align-items:center; justify-content:space-between; padding: 12px 0; }
+    .logo{ display:flex; align-items:center; gap:10px; font-weight:900; letter-spacing:.4px; }
+    .logo .mark{ width:30px; height:30px; border-radius:10px; background: linear-gradient(180deg, var(--accent-2), var(--accent)); box-shadow: 0 6px 16px rgba(255,140,0,.35); }
+    .nav-links{ display:flex; gap: clamp(10px, 2.4vw, 24px); }
+    .nav-links a{ color:#e9e9f0; text-decoration:none; font-weight:600; font-size:14px; }
+    .nav-actions{ display:flex; gap:10px; }
+    .menu-btn{ display:none; background:#1a1a1d; border:1px solid #2a2a30; color:#fff; border-radius:10px; padding:8px 10px; }
+    @media (max-width: 820px){
+      .menu-btn{ display:inline-block; }
+      .nav-links{ display:none; }
+      .nav-actions .btn{ display:none; }
+      .mobile-menu{ display:none; }
+      .mobile-menu.open{ display:block; padding:10px 0 18px; }
+      .mobile-menu a{ display:block; padding:10px 8px; color:#e9e9f0; text-decoration:none; border-top:1px solid #1f1f23; }
+      .mobile-menu .cta{ padding:12px 8px; }
+    }
+
+    .hero{ padding: clamp(48px, 8vw, 120px) 0; position:relative; overflow:hidden; }
+    .hero .grid{ display:grid; grid-template-columns: 1.1fr .9fr; gap: clamp(20px, 4vw, 40px); align-items:center; }
+    .hero h1{ font-size: clamp(28px, 5vw, 48px); line-height:1.1; margin: 0 0 14px; font-weight:900; letter-spacing:.3px; }
+    .hero p{ color:#d7d7de; font-size: clamp(14px, 2.4vw, 16px); margin:0 0 18px; }
+    .hero .cta{ display:flex; gap:12px; flex-wrap:wrap; }
+    .glow{ position:absolute; inset:auto -20% -40% -20%; height:60%; background: radial-gradient(60% 60% at 50% 70%, rgba(255,140,0,.15), transparent 70%); pointer-events:none; }
+    @media (max-width: 900px){ .hero .grid{ grid-template-columns: 1fr; text-align:center; } .hero .cta{ justify-content:center; } }
+
+    .stats{ display:grid; grid-template-columns: repeat(3, 1fr); gap:14px; }
+    .stat{ padding:18px; text-align:center; }
+    .stat .num{ font-size: clamp(22px, 4.6vw, 32px); font-weight:900; color:#ffad42; letter-spacing:.3px; }
+    .stat .label{ color:#bdbdc5; font-weight:600; font-size:14px; }
+    @media (max-width: 680px){ .stats{ grid-template-columns: 1fr; } }
+
+    .features{ display:grid; grid-template-columns: repeat(3, 1fr); gap:14px; }
+    .feature{ padding:18px; }
+    .feature h3{ margin:8px 0 6px; font-size: clamp(16px, 3.2vw, 18px); }
+    .feature p{ margin:0; color:#cfcfd8; font-size:14px; }
+    @media (max-width: 920px){ .features{ grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 640px){ .features{ grid-template-columns: 1fr; } }
+
+    .packages{ display:grid; grid-template-columns: repeat(3, 1fr); gap:14px; }
+    .pkg{ padding:18px; display:flex; flex-direction:column; gap:12px; }
+    .pkg .price{ font-weight:900; color:#ffad42; }
+    .pkg .go{ margin-top:auto; }
+    @media (max-width: 920px){ .packages{ grid-template-columns: 1fr; } }
+
+    .testimonials{ display:grid; grid-template-columns: 1fr 1fr; gap:14px; }
+    .quote{ padding:18px; }
+    .quote p{ color:#d7d7de; margin:0; }
+    .quote .by{ margin-top:8px; color:#a9a9b2; font-size:13px; }
+    @media (max-width: 820px){ .testimonials{ grid-template-columns: 1fr; } }
+
+    .faq{ display:grid; grid-template-columns: 1fr 1fr; gap:14px; }
+    .qa{ padding:14px 16px; }
+    .qa summary{ cursor:pointer; list-style:none; font-weight:700; }
+    .qa summary::marker, .qa summary::-webkit-details-marker{ display:none; }
+    .qa summary span{ color:#e9e9f0; }
+    .qa[open] summary span{ color:#ffad42; }
+    .qa div{ color:#cfcfd8; font-size:14px; margin-top:8px; }
+    @media (max-width: 900px){ .faq{ grid-template-columns: 1fr; } }
+
+    footer{ padding: 18px 0 40px; color:#bdbdc5; border-top:1px solid #1e1e22; margin-top:40px; }
+    footer a{ color:#d7d7de; text-decoration:none; }
+  
+    /* Gallery cards */
+    .gallery{ display:grid; grid-template-columns: repeat(5, 1fr); gap:14px; }
+    @media (max-width: 1100px){ .gallery{ grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 700px){ .gallery{ grid-template-columns: 1fr; } }
+    .gcard{ padding:0; overflow:hidden; display:flex; flex-direction:column; }
+    .gcard img{ width:100%; aspect-ratio:16/9; object-fit:cover; display:block; }
+    .gcard .pad{ padding:14px 16px; display:flex; flex-direction:column; gap:8px; }
+    .gcard h1{ font-size: clamp(16px, 3.2vw, 20px); margin:0; }
+    .gcard p{ margin:0; color:#cfcfd8; font-size:14px; }
+    .gcard .btn{ align-self:flex-start; }
+  
+    /* Intro animations */
+    .reveal{ opacity:0; transform: translateY(18px); }
+    .reveal.in{ animation: fadeUp .6s ease-out forwards; }
+    @keyframes fadeUp { to { opacity:1; transform: none; } }
+  
+    /* Features vertical override */
+    .features{ display:grid; grid-template-columns: 1fr !important; gap:14px; }
+    .card.feature{ overflow:hidden; }
+
+    /* Right-slide animation for feature cards */
+    .reveal.right{ opacity:0; transform: translateX(26px); }
+    .reveal.right.in{ animation: fadeInRight .6s ease-out forwards; }
+    @keyframes fadeInRight { to { opacity:1; transform:none; } }
+  
+    /* Feature slider */
+    .features.slider{ position:relative; overflow:hidden; display:block; min-height: 260px; }
+    .features.slider .feature{ 
+      position:absolute; inset:0; 
+      opacity:0; transform: translateX(40px); 
+      transition: transform .55s ease, opacity .55s ease; 
+    }
+    .features.slider .feature.active{ opacity:1; transform: translateX(0); }
+    .features.slider .feature.exit-left{ opacity:0; transform: translateX(-40px); }
+    .features.slider .nav{
+      position:absolute; right:12px; bottom:12px; display:flex; gap:8px; z-index:2;
+    }
+    .features.slider .dot{
+      width:8px; height:8px; border-radius:50%; background:#3a3a41; border:1px solid #56565f;
+    }
+    .features.slider .dot.active{ background:#ffad42; border-color:#ffad42; }
+
+  
+    /* features static grid override */
+    #features .features{
+      display: grid !important;
+      grid-template-columns: repeat(3, 1fr) !important;
+      gap: 14px !important;
+      overflow: visible !important;
+      scroll-snap-type: none !important;
+      white-space: normal !important;
+    }
+    #features .feature{
+      scroll-snap-align: unset !important;
+      width: auto !important;
+      min-width: 0 !important;
+    }
+    @media (max-width: 920px){
+      #features .features{ grid-template-columns: 1fr 1fr !important; }
+    }
+    @media (max-width: 640px){
+      #features .features{ grid-template-columns: 1fr !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="container nav-inner">
+      <div class="logo"><div class="mark"></div><div>Magnus</div></div>
+      <button class="menu-btn" id="menuBtn">Menu</button>
+      <div class="nav-links" id="navLinks">
+        <a href="#how">How it works</a>
+        <a href="#features">Features</a>
+        <a href="#packages">Packages</a>
+        <a href="#faq">FAQ</a>
+      </div>
+      <div class="nav-actions">
+        <a class="btn" href="index%20(12).html">Get Started</a>
+      </div>
+    </div>
+    <div id="mobileMenu" class="container mobile-menu">
+      <a href="#how">How it works</a>
+      <a href="#features">Features</a>
+      <a href="#packages">Packages</a>
+      <a href="#faq" class="cta"><span class="btn" style="width:100%;">Get Started</span></a>
+    </div>
+  </nav>
+
+  <header class="section hero">
+    <div class="container grid">
+      <div>
+        <span class="pill">Earn with Smartphone Tasks</span>
+        <h1>Value‑Driven Income for Real People</h1>
+        <p>Magnus combines product creation, reselling, skills training, and automation so you can build lasting wealth, strong habits, and daily income.</p>
+        <div class="cta">
+          <a class="btn" href="index%20(12).html">Select a Package</a>
+          <a class="btn ghost" href="#features">Explore Features</a>
+        </div>
+      </div>
+      <div class="card" style="padding:18px; display:grid; gap:12px;">
+        <div class="pill">Magnus Credit</div>
+        <div class="card" style="padding:12px; display:flex; justify-content:space-between; align-items:center;">
+          <div>
+            <div style="font-weight:700;">You’ve been credited by Magnus</div>
+            <div style="color:#bdbdc5; font-size:13px;">Milestone bonus • Week complete</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-weight:900; color:#ffad42; font-size:18px;">₦12,000</div>
+            <div style="color:#bdbdc5; font-size:12px;">Wallet • NGN</div>
+          </div>
+        </div>
+        <div class="card" style="padding:12px; display:flex; justify-content:space-between; align-items:center;">
+          <div style="font-weight:700;">12k+ Active users</div>
+          <div style="color:#bdbdc5;">Ref: MG-DA0I0</div>
+        </div>
+      </div>
+    </div>
+    <div class="glow"></div>
+  </header>
+
+  <section class="section">
+    \1
+      <div class="card stat video-card reveal">
+        <video controls playsinline style="width:100%; border-radius:14px; outline:none;" poster="https://picsum.photos/seed/magnusvideo/800/450">
+          <source src="https://cdn.coverr.co/videos/coverr-typing-on-a-laptop-5856/1080p.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+        <div class="label" style="margin-top:8px;">How Magnus Works (Demo)</div>
+      </div>
+<div class="card stat"><div class="num">12k+</div><div class="label">Active Users</div></div>
+      <div class="card stat"><div class="num">₦920M</div><div class="label">Processed (Demo)</div></div>
+      <div class="card stat"><div class="num">10+</div><div class="label">Supported Countries</div></div>
+    </div>
+  </section>
+
+  
+
+
+  <!-- GALLERY -->
+  <section class="section" id="gallery">
+    <div class="container">
+      <h2 style="margin:0 0 16px; font-size: clamp(22px, 3.6vw, 30px);">Discover Magnus</h2>
+      <div class="gallery">
+        
+        <div class="card gcard">
+          <img src="https://picsum.photos/seed/magnus1/640/360" alt="Magnus card 1" loading="lazy" />
+          <div class="pad">
+            <h1>Start Earning Today</h1>
+            <p>Quick smartphone tasks and transparent payouts.</p>
+            <a class="btn" href="index%20(12).html">Join Now</a>
+          </div>
+        </div>
+    
+        <div class="card gcard">
+          <img src="https://picsum.photos/seed/magnus2/640/360" alt="Magnus card 2" loading="lazy" />
+          <div class="pad">
+            <h1>Daily Smartphone Tasks</h1>
+            <p>Repeatable micro‑jobs built for consistency.</p>
+            <a class="btn" href="index%20(12).html">Join Now</a>
+          </div>
+        </div>
+    
+        <div class="card gcard">
+          <img src="https://picsum.photos/seed/magnus3/640/360" alt="Magnus card 3" loading="lazy" />
+          <div class="pad">
+            <h1>Streaming Jobs that Pay</h1>
+            <p>Turn your time into income with guided tasks.</p>
+            <a class="btn" href="index%20(12).html">Join Now</a>
+          </div>
+        </div>
+    
+        <div class="card gcard">
+          <img src="https://picsum.photos/seed/magnus4/640/360" alt="Magnus card 4" loading="lazy" />
+          <div class="pad">
+            <h1>Grow Without Referrals</h1>
+            <p>Pro & Business plans can earn without networking.</p>
+            <a class="btn" href="index%20(12).html">Join Now</a>
+          </div>
+        </div>
+    
+        <div class="card gcard">
+          <img src="https://picsum.photos/seed/magnus5/640/360" alt="Magnus card 5" loading="lazy" />
+          <div class="pad">
+            <h1>Fast, Clear Withdrawals</h1>
+            <p>Withdrawals designed for speed and clarity.</p>
+            <a class="btn" href="index%20(12).html">Join Now</a>
+          </div>
+        </div>
+    
+        <div class="card gcard">
+          <img src="https://picsum.photos/seed/magnus6/640/360" alt="Magnus card 6" loading="lazy" />
+          <div class="pad">
+            <h1>Automated, Scalable Tools</h1>
+            <p>Technology that helps you scale sustainably.</p>
+            <a class="btn" href="index%20(12).html">Join Now</a>
+          </div>
+        </div>
+    
+        <div class="card gcard">
+          <img src="https://picsum.photos/seed/magnus7/640/360" alt="Magnus card 7" loading="lazy" />
+          <div class="pad">
+            <h1>Milestone Bonuses</h1>
+            <p>From ₦5,800 for 3 sales up to ₦10,000,000.</p>
+            <a class="btn" href="index%20(12).html">Join Now</a>
+          </div>
+        </div>
+    
+        <div class="card gcard">
+          <img src="https://picsum.photos/seed/magnus8/640/360" alt="Magnus card 8" loading="lazy" />
+          <div class="pad">
+            <h1>PayFac Commissions</h1>
+            <p>Earn up to ₦2,280 per approved user (demo).</p>
+            <a class="btn" href="index%20(12).html">Join Now</a>
+          </div>
+        </div>
+    
+        <div class="card gcard">
+          <img src="https://picsum.photos/seed/magnus9/640/360" alt="Magnus card 9" loading="lazy" />
+          <div class="pad">
+            <h1>Learn • Build • Earn</h1>
+            <p>Build habits, skills, and steady income.</p>
+            <a class="btn" href="index%20(12).html">Join Now</a>
+          </div>
+        </div>
+    
+        <div class="card gcard">
+          <img src="https://picsum.photos/seed/magnus10/640/360" alt="Magnus card 10" loading="lazy" />
+          <div class="pad">
+            <h1>Join Magnus Now</h1>
+            <p>Be part of a value‑driven ecosystem.</p>
+            <a class="btn" href="index%20(12).html">Join Now</a>
+          </div>
+        </div>
+    
+      </div>
+    </div>
+  </section>
+  <section id="packages" class="section">
+    <div class="container">
+      <h2 style="margin:0 0 16px; font-size: clamp(22px, 3.6vw, 30px);">Choose a package</h2>
+      <div class="packages">
+        <div class="card pkg"><div class="pill">Magnus Lite</div><div>Networking‑focused with limited earnings.</div><div class="price">From ₦11,000</div><a class="btn go" href="index%20(12).html">Select Lite</a></div>
+        <div class="card pkg"><div class="pill">Magnus Pro</div><div>High‑income plan that can earn without referrals.</div><div class="price">From ₦17,500</div><a class="btn go" href="index%20(12).html">Select Pro</a></div>
+        <div class="card pkg"><div class="pill">Magnus Business</div><div>Maximum earnings; best Product PR rate.</div><div class="price">From ₦28,500</div><a class="btn go" href="index%20(12).html">Select Business</a></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container testimonials">
+      <div class="card quote"><p>“Magnus feels different — the tasks are clear and the payouts are transparent.”</p><div class="by">— Ada, Lagos</div></div>
+      <div class="card quote"><p>“I scaled from Lite to Business and my daily earnings doubled with Product PR.”</p><div class="by">— Malik, Accra</div></div>
+    </div>
+  </section>
+
+  <section id="faq" class="section">
+    <div class="container faq">
+      <details class="card qa"><summary><span>Is Magnus a regular affiliate platform?</span></summary><div>No — it’s a value‑driven ecosystem combining product creation, reselling, skills training, and automation.</div></details>
+      <details class="card qa"><summary><span>Do I need referrals to earn?</span></summary><div>Not necessarily. Pro and Business can generate income without referrals, while Lite focuses on networking.</div></details>
+      <details class="card qa"><summary><span>How do withdrawals work?</span></summary><div>Withdrawals are designed to be fast and transparent. Multi‑country support is rolling out.</div></details>
+      <details class="card qa"><summary><span>What is PayFac?</span></summary><div>Payment Facilitators (sub‑admins) review user details and earn commissions per approval.</div></details>
+    </div>
+  </section>  <!-- FOOTER -->
+  <footer>
+    <div class="container" style="display:flex; align-items:center; justify-content:space-between; gap:12px; flex-wrap:wrap;">
+      <div>© <span id="y"></span> Magnus. All rights reserved.</div>
+      <div style="display:flex; gap:14px;">
+        <a href="#">Privacy</a>
+        <a href="#">Terms</a>
+        <a href="#features">Features</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    menuBtn?.addEventListener('click', ()=>{ mobileMenu.classList.toggle('open'); });
+    document.getElementById('y').textContent = new Date().getFullYear();
+  
+  // Reveal animations for cards
+  (function(){
+    const cards = Array.from(document.querySelectorAll('.card'));
+    cards.forEach(el => el.classList.add('reveal'));
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach((e, i)=>{
+        if(e.isIntersecting){
+          e.target.style.animationDelay = (i * 40) + 'ms';
+          e.target.classList.add('in');
+          io.unobserve(e.target);
+        }
+      });
+    }, { threshold: 0.08 });
+    cards.forEach(el => io.observe(el));
+  })();
+
+  // Tag feature cards for right-slide
+  (function(){
+    const featureCards = Array.from(document.querySelectorAll('.card.feature'));
+    featureCards.forEach(el => el.classList.add('right'));
+  })();
+
+  // === Feature cards slideshow (slides in from right) ===
+  (function(){
+    const container = document.querySelector('#features .features');
+    if(!container) return;
+    container.classList.add('slider');
+    const slides = Array.from(container.querySelectorAll('.feature'));
+    if(slides.length === 0) return;
+
+    // Stack slides
+    slides.forEach((el, i)=>{
+      el.style.zIndex = (100 - i);
+    });
+
+    // Build dots
+    const nav = document.createElement('div');
+    nav.className = 'nav';
+    const dots = slides.map((_,i)=>{
+      const d = document.createElement('div');
+      d.className = 'dot' + (i===0 ? ' active' : '');
+      d.addEventListener('click', ()=> go(i, true));
+      nav.appendChild(d);
+      return d;
+    });
+    container.appendChild(nav);
+
+    // Ensure container height equals tallest slide
+    function fitHeight(){
+      let h = 0;
+      slides.forEach(s=>{ h = Math.max(h, s.offsetHeight); });
+      container.style.minHeight = h + 'px';
+    }
+    window.addEventListener('load', fitHeight);
+    window.addEventListener('resize', fitHeight);
+    setTimeout(fitHeight, 0);
+
+    let idx = 0, busy = false, timer = null;
+    slides[0].classList.add('active');
+
+    function markDots(i){
+      dots.forEach((d, k)=> d.classList.toggle('active', k===i));
+    }
+
+    function go(next, user){
+      if(busy || next===idx) return;
+      busy = True = true;
+      const cur = slides[idx];
+      const incoming = slides[next];
+      // Prepare incoming from right
+      incoming.classList.remove('exit-left');
+      incoming.style.transition = 'none';
+      incoming.style.opacity = '0';
+      incoming.style.transform = 'translateX(40px)';
+      void incoming.offsetWidth; // reflow
+      incoming.style.transition = '';
+      incoming.classList.add('active');
+      // send current to left
+      cur.classList.add('exit-left');
+      cur.classList.remove('active');
+
+      setTimeout(()=>{
+        cur.classList.remove('exit-left');
+        idx = next;
+        markDots(idx);
+        busy = false;
+      }, 600);
+
+      if(user) restart();
+    }
+
+    function next(){ go((idx+1)%slides.length); }
+    function restart(){
+      if(timer) clearInterval(timer);
+      timer = setInterval(next, 4000);
+    }
+    restart();
+
+    // Swipe support
+    let sx = 0, sy = 0;
+    container.addEventListener('touchstart', (e)=>{
+      const t = e.touches[0]; sx = t.clientX; sy = t.clientY;
+    }, {passive:true});
+    container.addEventListener('touchend', (e)=>{
+      if(sx===0) return;
+      const t = e.changedTouches[0]; const dx = t.clientX - sx; const dy = t.clientY - sy;
+      if(Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 40){
+        if(dx < 0) next(); else go((idx - 1 + slides.length) % slides.length, true);
+      }
+      sx = sy = 0;
+    });
+
+  })();
+
+</script>
+</body>
+</html>
